@@ -1,5 +1,5 @@
 flask
-openai
+openai==0.28
 flask_cors
 spacy
 pdfplumber
