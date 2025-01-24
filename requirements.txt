@@ -1,0 +1,6 @@
+flask
+openai
+flask_cors
+spacy
+pdfplumber
+PyPDF2
