@@ -8,7 +8,7 @@ import openai
 import os
 
 app = Flask(__name__)
-CORS(app)  # Allow cross-origin requests for the frontend
+CORS(app, origins=["http://localhost:3000"])
 
 spacy.prefer_gpu()
 nlp = spacy.load("en_core_web_md")
