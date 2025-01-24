@@ -8,7 +8,8 @@ import openai
 import os
 
 app = Flask(__name__)
-CORS(app, origins=["https://whimsical-dodol-b6364e.netlify.app/"])
+# CORS(app, origins=["https://whimsical-dodol-b6364e.netlify.app/"])
+CORS(app, origins="*")
 
 spacy.prefer_gpu()
 nlp = spacy.load("en_core_web_md")
