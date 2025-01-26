@@ -24,7 +24,7 @@ app.add_middleware(
 )
 
 # Get the Redis URL from the environment or default to a local Redis instance
-redis_url = os.getenv("REDIS_URL", "redis://redis:6379/0")
+redis_url = os.getenv("REDIS_URL")
 
 # Create a Redis client
 redis_client = redis.StrictRedis.from_url(redis_url)
