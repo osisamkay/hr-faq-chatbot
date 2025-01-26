@@ -4,3 +4,4 @@ flask_cors
 spacy
 pdfplumber
 PyPDF2
+sentence-transformers

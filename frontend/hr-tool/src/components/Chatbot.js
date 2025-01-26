@@ -1,77 +1,192 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { Box, Button, TextField, Typography, Paper } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Paper,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 
 const Chatbot = () => {
-  const [message, setMessage] = useState("");
-  const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const lastMessageRef = useRef(null);
+
+  const Base_Url="http://127.0.0.1:10000"
+  // const Base_Url="http://127.0.0.1:10000" || "https://hr-faq-chatbot.onrender.com"
 
   const sendMessage = async () => {
-    setLoading(true);
-    if (!message.trim()) {
-      alert("Please enter a question!");
+    if (!inputMessage.trim()) {
+      alert("Please enter a message!");
       return;
     }
 
-    try {
-      const res = await axios.post("https://hr-faq-chatbot.onrender.com/chatbot", {
-        message: message,
-      });
+    const newMessages = [
+      ...messages,
+      { sender: "user", text: inputMessage },
+    ];
+    setMessages(newMessages);
+    setInputMessage("");
+    setIsLoading(true);
 
-      setResponse(res.data.response);
-      setLoading(false)
+    try {
+      const response = await axios.post(
+        `${Base_Url}/chatbot`, 
+        {
+          message: inputMessage,
+          username: "guest", 
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const botResponse = response.data.response;
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "bot", text: botResponse },
+      ]);
+      console.log(botResponse);
     } catch (error) {
       console.error("Error sending message:", error);
-      setLoading(false)
-      setResponse("An error occurred while searching the document.");
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "bot", text: "Sorry, there was an error. Please try again!" },
+      ]);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  };
+
+ useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [messages]);
 
   return (
     <Paper
       elevation={3}
-      style={{
+      sx={{
         padding: "20px",
-        margin: "20px auto",
         maxWidth: "600px",
-        textAlign: "center",
+        margin: "20px auto",
+        borderRadius: "15px",
+        boxShadow: 3,
       }}
     >
-      <Typography variant="h4" gutterBottom>
-        Interactive FAQ Chatbot with PDF Search
+      <Typography
+        variant="h5"
+        gutterBottom
+        align="center"
+        sx={{ fontWeight: "bold" }}
+      >
+         Interactive FAQ Chatbot with PDF Search
       </Typography>
-      <Box display="flex" flexDirection="column" gap={2}>
+
+      {/* Chat Window */}
+      <Box
+        
+        sx={{
+          border: "1px solid #ccc",
+          borderRadius: "10px",
+          padding: "10px",
+          maxHeight: "400px",
+          overflowY: "scroll",
+          marginBottom: "20px",
+          backgroundColor: "#f9f9f9",
+          position: "relative",
+        }}
+      >
+        <Typography
+          variant="subtitle2"
+          align="center"
+          sx={{
+            backgroundColor: "#fff",
+            padding: "10px",
+            color: "#888",
+          }}
+        >
+          Chat Conversation
+        </Typography>
+        {messages.length === 0 ? (
+          <Typography
+            variant="body2"
+            align="center"
+            sx={{
+              color: "#888",
+              marginTop: "20px",
+            }}
+          >
+            Start a conversation by asking a question!
+          </Typography>
+        ) : (
+          messages.map((msg, index) => (
+            <Box
+            ref={index === messages.length - 1 ? lastMessageRef : null}
+              key={index}
+              sx={{
+                display: "flex",
+                justifyContent:
+                  msg.sender === "user" ? "flex-end" : "flex-start",
+                marginBottom: "10px",
+              }}
+            >
+              <Box
+                sx={{
+                  padding: "10px",
+                  borderRadius: "10px",
+                  maxWidth: "70%",
+                  backgroundColor:
+                    msg.sender === "user" ? "#1976d2" : "#e0e0e0",
+                  color: msg.sender === "user" ? "#fff" : "#000",
+                  wordBreak: "break-word",
+                }}
+              >
+                {msg.text}
+              </Box>
+            </Box>
+          ))
+        )}
+      </Box>
+
+      {/* Input Field and Button */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: "10px",
+        }}
+      >
         <TextField
-          label="Ask a question about the HR policies"
+          fullWidth
           variant="outlined"
-          multiline
-          rows={4}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type your question..."
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         <Button
           variant="contained"
           color="primary"
           onClick={sendMessage}
-          size="large"
+          disabled={isLoading}
+          sx={{
+            minWidth: "100px",
+          }}
         >
-          {loading ? "Searching..." : "Send"}
+          {isLoading ? <CircularProgress size={24} color="inherit" /> : "Send"}
         </Button>
-        {response && (
-          <Typography
-            variant="body1"
-            style={{
-              marginTop: "20px",
-              padding: "10px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              backgroundColor: "#f9f9f9",
-            }}
-          >
-            {response}
-          </Typography>
-        )}
       </Box>
     </Paper>
   );
