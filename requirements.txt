@@ -5,3 +5,5 @@ spacy
 pdfplumber
 PyPDF2
 sentence-transformers
+redis==4.6.0
+fuzzywuzzy
