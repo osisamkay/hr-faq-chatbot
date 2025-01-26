@@ -16,7 +16,7 @@ const Chatbot = () => {
   const lastMessageRef = useRef(null);
 
   // const Base_Url="http://127.0.0.1:10000"
-  const Base_Url="https://hr-faq-chatbot-1.onrender.com"
+  const Base_Url="https://lionfish-app-bwkhi.ondigitalocean.app"
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) {
