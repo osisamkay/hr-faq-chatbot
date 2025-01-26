@@ -7,7 +7,7 @@ from PyPDF2 import PdfReader
 import openai
 import os
 import redis
-from fuzzywuzzy import process
+# from fuzzywuzzy import process
 
 app = Flask(__name__)
 CORS(app, origins="*")
