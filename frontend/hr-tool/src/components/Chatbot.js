@@ -15,8 +15,8 @@ const Chatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const lastMessageRef = useRef(null);
 
-  // const Base_Url="http://127.0.0.1:10000"
-  const Base_Url="https://hr-faq-chatbot.onrender.com"
+  const Base_Url="http://127.0.0.1:10000"
+  // const Base_Url="https://hr-faq-chatbot.onrender.com"
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) {
