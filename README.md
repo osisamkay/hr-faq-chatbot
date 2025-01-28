@@ -6,32 +6,37 @@ An AI-powered HR FAQ chatbot designed to assist employees with quick answers to 
 
 ## **Features**
 
-- **Interactive Chatbot**: 
-  - Uses OpenAI's GPT-3.5-turbo for generating human-like responses.
-  - Supports personalized responses based on user profiles.
+- **FAQ Query Handling**:
+   - Quickly answers frequently asked HR questions from predefined FAQs.
 
-- **PDF Policy Search**:
-  - Utilizes spaCy for natural language processing.
-  - Searches through HR policy PDF documents to provide relevant answers.
-  - Fallback to GPT for questions not covered in the documents.
+- **PDF Search**:
+   - Searches and extracts relevant information from uploaded HR policy documents and handbooks.
 
-- **User-Friendly Interface**:
-  - Frontend designed using React and styled with Chakra UI for a clean and modern look.
+- **Redis Caching**:
+   - Stores frequently requested responses to reduce latency and improve performance.
+
+- **OpenAI Integration**
+   - Leverages GPT-3.5-turbo for handling fallback responses and conversational queries.
+
+- **Scalable and Efficient**:
+   - Built using FastAPI (or Flask for older versions), designed to run in a containerized environment for scalability.
 
 ---
 
 ## **Technologies Used**
 
 ### **Backend**
-- Python
-- Flask
-- OpenAI API
-- spaCy
-- PyPDF2
+- FastAPI for the backend API.
+- Redis for caching frequently requested responses.
+- Hugging Face SentenceTransformer for semantic search.
+- spaCy for natural language processing.
+- OpenAI GPT-3.5-turbo for generating contextual responses.
+- PyPDF2 for extracting text from uploaded PDF documents.
+- Docker for containerized deployment.
 
 ### **Frontend**
 - React
-- Chakra UI
+- Material UI
 - Axios (for API requests)
 
 ---
@@ -50,7 +55,7 @@ An AI-powered HR FAQ chatbot designed to assist employees with quick answers to 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/hr-faq-chatbot.git
+   git clone https://github.com/osisamkay/hr-faq-chatbot.git
    cd hr-faq-chatbot
    ```
 
@@ -70,10 +75,15 @@ An AI-powered HR FAQ chatbot designed to assist employees with quick answers to 
    ```bash
    python -m spacy download en_core_web_md
    ```
+5. Set Up Environment Variables
+   ```bash
+   OPENAI_API_KEY=<your_openai_api_key>
+   REDIS_URL=redis://localhost:6379/0
+   ```
 
-5. Update the `pdf_paths` in `app.py` with the paths to your HR policy documents.
+6. Update the `pdf_paths` in `app.py` with the paths to your HR policy documents.
 
-6. Start the Flask server:
+7. Start the Flask server:
    ```bash
    python app.py
    ```
@@ -171,7 +181,6 @@ hr-faq-chatbot/
 
 ## **Future Improvements**
 1. **Authentication**: Add user authentication for secure and personalized access.
-2. **Enhanced Search**: Improve PDF search with more advanced NLP techniques.
 3. **Admin Dashboard**: Allow HR teams to upload and manage policies dynamically.
 4. **Multi-language Support**: Extend functionality for employees in different regions.
 
@@ -190,6 +199,6 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 ## **Acknowledgments**
 - OpenAI for providing powerful language models.
 - spaCy for robust natural language processing.
-- Chakra UI for a sleek and modern UI design.
+- Material UI for a sleek and modern UI design.
 
 ---

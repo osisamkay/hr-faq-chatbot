@@ -171,7 +171,7 @@ const Chatbot = () => {
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Type your question..."
+          label="Type your question..."
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={handleKeyPress}

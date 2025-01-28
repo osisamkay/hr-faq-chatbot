@@ -3,7 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "10000:10000"
+      - "7860:7860"
     environment:
       - REDIS_URL=${REDIS_URL}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
